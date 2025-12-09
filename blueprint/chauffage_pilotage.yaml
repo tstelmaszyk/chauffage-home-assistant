@@ -75,10 +75,10 @@ action:
           - condition: state
             entity_id: !input entity_activation
             state: "off"
-        actions:
-          - action: climate.set_temperature
+        sequence:
+          - service: climate.set_temperature
             data:
-              value: '{{temperature_hors_gel}}'
+              temperature: '{{temperature_hors_gel}}'
             target:
               entity_id: !input entity_consigne
       # ----- Mode absent
@@ -86,10 +86,10 @@ action:
           - condition: state
             entity_id: !input entity_precense
             state: "off"
-        actions:
-          - action: climate.set_temperature
+        sequence:
+          - service: climate.set_temperature
             data:
-              value: '{{temperature_eco}}'
+              temperature: '{{temperature_eco}}'
             target:
               entity_id: !input entity_consigne
       # ----- Mode Auto - confort
@@ -97,10 +97,10 @@ action:
           - condition: state
             entity_id: !input entity_planning
             state: "on"
-        actions:
-          - action: climate.set_temperature
+        sequence:
+          - service: climate.set_temperature
             data:
-              value: '{{temperature_confort}}'
+              temperature: '{{temperature_confort}}'
             target:
               entity_id: !input entity_consigne
       # ----- Mode Auto - eco
@@ -108,10 +108,10 @@ action:
           - condition: state
             entity_id: !input entity_planning
             state: "off"
-        actions:
-          - action: climate.set_temperature
+        sequence:
+          - service: climate.set_temperature
             data:
-              value: '{{temperature_eco}}'
+              temperature: '{{temperature_eco}}'
             target:
               entity_id: !input entity_consigne
 
