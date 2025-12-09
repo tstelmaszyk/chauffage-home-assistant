@@ -10,7 +10,7 @@ blueprint:
       description: Champs d'entrée de la température de consigne (input number).
       selector:
         entity:
-          domain: input_number
+          domain: climate
     temperature_hors_gel:
       name: Temperature hors gel
       description: Temparature de hors gel à parametrer (absence longue ou chauffage éteint)

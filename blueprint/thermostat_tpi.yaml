@@ -26,7 +26,7 @@ blueprint:
       description: Champs d'entrée de la température de consigne (input number).
       selector:
         entity:
-          domain: input_number
+          domain: climate
     entity_temp_ext:
       name: Température extérieure
       description: Sonde de mesure de la température extérieure (sensor)
