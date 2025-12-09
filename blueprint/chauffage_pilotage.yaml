@@ -40,13 +40,13 @@ blueprint:
       description: Bouton switch à creer pour activer ou non le chauffage (été/hivers, arrêt long vacances ....)
       selector:
         entity:
-          domain: switch
+          domain: input_booleen
     entity_precense:
       name: Precense ou non à la maison
       description: Switch pour indiquer ou non la précense dans le domicile
       selector:
         entity:
-          domain: switch
+          domain: input_booleen
     entity_planning:
       name: Calendrier
       description: Horraire de chauffe
