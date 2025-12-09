@@ -11,129 +11,108 @@ blueprint:
       selector:
         entity:
           domain: input_number
-    entity_mode:
-      name: Sélection du mode
-      description: Entité de gestion du mode de gestion du chauffage (input_select)
+    temperature_hors_gel:
+      name: Temperature hors gel
+      description: Temparature de hors gel à parametrer (absence longue ou chauffage éteint)
       selector:
-        entity:
-          domain: input_select
-    entity_schedule_confort:
-      name: Schedule mode confort
-      description: Entité générée par schedule pour la planification du mode confort (switch)
+        number:
+          min: 3
+          max: 10
+          step: 0.5
+    temperature_eco:
+      name: Temperature eco
+      description: Temparature economie à choisir (nuit ou absence courte)
+      selector:
+        number:
+          min: 10
+          max: 21
+          step: 0.5
+    temperature_confort:
+      name: Temperature de confort
+      description: Temparature de confort à choisir
+      selector:
+        number:
+          min: 15
+          max: 28
+          step: 0.5
+    entity_activation:
+      name: Activation ou non du chauffage
+      description: Bouton switch à creer pour activer ou non le chauffage (été/hivers, arrêt long vacances ....)
       selector:
         entity:
           domain: switch
-    entity_schedule_eco:
-      name: Schedule mode eco
-      description: Entité générée par schedule pour la planification du mode eco (switch)
+    entity_precense:
+      name: Precense ou non à la maison
+      description: Switch pour indiquer ou non la précense dans le domicile
       selector:
         entity:
           domain: switch
-    entity_thermostat_tpi:
-      name: Thermostat
-      description: Entité de gestion du thermostat TPI (automation)
+    entity_planning:
+      name: Calendrier
+      description: Horraire de chauffe
       selector:
         entity:
-          domain: automation
+          domain: schedule
 
-
-# Température pour le hors gel
 variables:
-  temperature_hg: 10
+  temperature_hors_gel: !input temperature_hors_gel
+  temperature_eco: !input temperature_eco
+  temperature_confort: !input temperature_confort
 
-alias: Pilotage chauffage bureau Patrick
+alias: Pilotage chauffage
 description: ''
 trigger:
   - platform: state
-    entity_id: !input entity_mode
-condition: []
+    entity_id: !input entity_activation
+  - platform: state
+    entity_id: !input entity_precense
+  - platform: state
+    entity_id: !input entity_planning
 action:
   - choose:
-      # ----- Mode Stop
-      - conditions:
-          - condition: state
-            entity_id: !input entity_mode
-            state: Stop
-        sequence:
-          - service: input_number.set_value
-            data:
-              value: 0
-            target:
-              entity_id: !input entity_consigne
-          - delay:
-              seconds: 1
-          - service: switch.turn_off
-            target:
-              entity_id:
-                - !input entity_schedule_eco
-                - !input entity_schedule_confort
-          - service: automation.turn_off
-            target:
-              entity_id: !input entity_thermostat_tpi
       # ----- Mode Hors-gel
       - conditions:
           - condition: state
-            entity_id: !input entity_mode
-            state: Hors-gel
+            entity_id: !input entity_activation
+            state: "off"
         sequence:
-          - service: automation.turn_on
-            target:
-              entity_id: !input entity_thermostat_tpi
           - service: input_number.set_value
             data:
-              value: '{{temperature_hg}}'
+              value: '{{temperature_hors_gel}}'
             target:
               entity_id: !input entity_consigne
-          - service: switch.turn_off
+      # ----- Mode absent
+      - conditions:
+          - condition: state
+            entity_id: !input entity_precense
+            state: "off"
+        sequence:
+          - service: input_number.set_value
+            data:
+              value: '{{temperature_eco}}'
             target:
-              entity_id:
-                - !input entity_schedule_eco
-                - !input entity_schedule_confort
+              entity_id: !input entity_consigne
       # ----- Mode Auto - confort
       - conditions:
           - condition: state
-            entity_id: !input entity_mode
-            state: Auto - confort
+            entity_id: !input entity_planning
+            state: "on"
         sequence:
-          - service: automation.turn_on
+          - service: input_number.set_value
+            data:
+              value: '{{temperature_confort}}'
             target:
-              entity_id: !input entity_thermostat_tpi
-          - service: switch.turn_on
-            target:
-              entity_id: !input entity_schedule_confort
-          - service: switch.turn_off
-            target:
-              entity_id:
-                - !input entity_schedule_eco
-      # ----- Mode Auto - eco ou absent
+              entity_id: !input entity_consigne
+      # ----- Mode Auto - eco
       - conditions:
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: !input entity_mode
-                state: 'Auto - eco'
-              - condition: state
-                entity_id: !input entity_mode
-                state: 'Absent'
+          - condition: state
+            entity_id: !input entity_planning
+            state: "on"
         sequence:
-          - service: automation.turn_on
+          - service: input_number.set_value
+            data:
+              value: '{{temperature_eco}}'
             target:
-              entity_id: !input entity_thermostat_tpi
-          - service: switch.turn_off
-            target:
-              entity_id:
-                - !input entity_schedule_confort
-          - service: switch.turn_on
-            target:
-              entity_id: !input entity_schedule_eco
-    # ----- Mode manuel
-    default:
-      - service: switch.turn_off
-        target:
-          entity_id:
-            - !input entity_schedule_eco
-            - !input entity_schedule_confort
-      - service: automation.turn_on
-        target:
-          entity_id: !input entity_thermostat_tpi
+              entity_id: !input entity_consigne
+
 mode: single
