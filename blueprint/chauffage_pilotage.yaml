@@ -76,7 +76,7 @@ action:
             entity_id: !input entity_activation
             state: "off"
         sequence:
-          - service: input_number.set_value
+          - service: climate.set_temperature
             data:
               value: '{{temperature_hors_gel}}'
             target:
@@ -87,7 +87,7 @@ action:
             entity_id: !input entity_precense
             state: "off"
         sequence:
-          - service: input_number.set_value
+          - service: climate.set_temperature
             data:
               value: '{{temperature_eco}}'
             target:
@@ -98,7 +98,7 @@ action:
             entity_id: !input entity_planning
             state: "on"
         sequence:
-          - service: input_number.set_value
+          - service: climate.set_temperature
             data:
               value: '{{temperature_confort}}'
             target:
@@ -109,7 +109,7 @@ action:
             entity_id: !input entity_planning
             state: "off"
         sequence:
-          - service: input_number.set_value
+          - service: climate.set_temperature
             data:
               value: '{{temperature_eco}}'
             target:
