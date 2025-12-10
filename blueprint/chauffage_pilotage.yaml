@@ -53,6 +53,13 @@ blueprint:
       selector:
         entity:
           domain: schedule
+    entity_fenetre:
+          name: Fenètre
+          description: Capteur d'ouverture de fenêtre (sensor)
+          selector:
+            entity:
+              domain: binary_sensor
+              device_class: opening
 
 variables:
   temperature_hors_gel: !input temperature_hors_gel
@@ -68,6 +75,9 @@ trigger:
     entity_id: !input entity_precense
   - platform: state
     entity_id: !input entity_planning
+  - platform: state
+    entity_id: !input entity_fenetre
+
 action:
   - choose:
       # ----- Mode Hors-gel
@@ -81,6 +91,9 @@ action:
               temperature: '{{temperature_hors_gel}}'
             target:
               entity_id: !input entity_consigne
+          - service: climate.turn_off
+            target:
+              entity_id: !input entity_consigne
       # ----- Mode absent
       - conditions:
           - condition: state
@@ -92,15 +105,16 @@ action:
               temperature: '{{temperature_eco}}'
             target:
               entity_id: !input entity_consigne
-      # ----- Mode Auto - confort
+          - service: climate.turn_on
+            target:
+              entity_id: !input entity_consigne
+      # ----- Fenetre to do turn Off
       - conditions:
           - condition: state
-            entity_id: !input entity_planning
+            entity_id: !input entity_fenetre
             state: "on"
         sequence:
-          - service: climate.set_temperature
-            data:
-              temperature: '{{temperature_confort}}'
+          - service: climate.turn_off
             target:
               entity_id: !input entity_consigne
       # ----- Mode Auto - eco
@@ -114,5 +128,21 @@ action:
               temperature: '{{temperature_eco}}'
             target:
               entity_id: !input entity_consigne
-
+          - service: climate.turn_on
+            target:
+              entity_id: !input entity_consigne
+      # ----- Mode Auto - confort
+      - conditions:
+          - condition: state
+            entity_id: !input entity_planning
+            state: "on"
+        sequence:
+          - service: climate.set_temperature
+            data:
+              temperature: '{{temperature_confort}}'
+            target:
+              entity_id: !input entity_consigne
+          - service: climate.turn_on
+            target:
+              entity_id: !input entity_consigne
 mode: single
