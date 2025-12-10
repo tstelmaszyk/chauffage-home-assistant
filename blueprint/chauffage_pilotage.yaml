@@ -35,12 +35,6 @@ blueprint:
           min: 15
           max: 28
           step: 0.5
-    entity_activation:
-      name: Activation ou non du chauffage
-      description: Bouton switch à creer pour activer ou non le chauffage (été/hivers, arrêt long vacances ....)
-      selector:
-        entity:
-          domain: input_boolean
     entity_precense:
       name: Precense ou non à la maison
       description: Switch pour indiquer ou non la précense dans le domicile
@@ -69,18 +63,6 @@ trigger:
   - platform: state
     entity_id: !input entity_planning
 action:
-  - choose:
-      # ----- Mode Hors-gel
-      - conditions:
-          - condition: state
-            entity_id: !input entity_activation
-            state: "off"
-        sequence:
-          - service: climate.set_temperature
-            data:
-              temperature: '{{temperature_hors_gel}}'
-            target:
-              entity_id: !input entity_consigne
       # ----- Mode absent
       - conditions:
           - condition: state
