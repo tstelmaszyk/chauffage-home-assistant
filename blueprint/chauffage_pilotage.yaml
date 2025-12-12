@@ -63,7 +63,7 @@ blueprint:
 
 variables:
   temperature_hors_gel: !input temperature_hors_gel
-  temperature_eco: "{{ state_attr('!input entity_consigne', 'away_temp') }}" #!input temperature_eco
+  temperature_eco: !input temperature_eco #temperature_eco: "{{ state_attr('!input entity_consigne', 'away_temp') }}" #!input temperature_eco
   temperature_confort: !input temperature_confort
 
 alias: Pilotage chauffage
