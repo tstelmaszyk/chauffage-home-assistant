@@ -109,14 +109,14 @@ action:
             target:
               entity_id: !input entity_consigne
       # ----- Fenetre to do turn Off
-      #- conditions:
-      #    - condition: state
-      #      entity_id: !input entity_fenetre
-      #      state: "on"
-      #  sequence:
-      #    - service: climate.turn_off
-      #      target:
-      #        entity_id: !input entity_consigne
+      - conditions:
+          - condition: state
+            entity_id: !input entity_fenetre
+            state: "on"
+        sequence:
+          - service: climate.turn_off
+            target:
+              entity_id: !input entity_consigne
       # ----- Mode Auto - eco
       - conditions:
           - condition: state
