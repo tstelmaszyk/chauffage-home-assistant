@@ -11,13 +11,6 @@ blueprint:
       selector:
         entity:
           domain: climate
-      name: Temperature de confort
-      description: Temparature de confort à choisir
-      selector:
-        number:
-          min: 15
-          max: 28
-          step: 0.5
     entity_activation:
       name: Activation ou non du chauffage
       description: Bouton switch à creer pour activer ou non le chauffage (été/hivers, arrêt long vacances ....)
