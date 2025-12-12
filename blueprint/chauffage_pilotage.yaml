@@ -92,7 +92,7 @@ action:
           - service: input_number.set_value
             data_template:
               entity_id: !input entity_sauvegarde
-              value: '{{ '22' | float }}'
+              value: "{{state_attr (entity_consigne, 'temperature')}}"
           - service: climate.turn_off
             target:
               entity_id: !input entity_consigne
