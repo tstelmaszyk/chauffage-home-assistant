@@ -51,8 +51,8 @@ trigger:
 
 action:
   - alias: récupération des données
-  variables:
-        entity_consigne: !input entity_consigne
+    variables:
+          entity_consigne: !input entity_consigne
   - choose:
       # ----- Mode Hors-gel
       - conditions:
