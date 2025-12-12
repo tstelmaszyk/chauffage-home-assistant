@@ -44,11 +44,6 @@ blueprint:
               domain: binary_sensor
               device_class: opening
 
-variables:
-  temperature_hors_gel: !input temperature_hors_gel
-  temperature_eco: !input temperature_eco
-  temperature_confort: !input temperature_confort
-
 alias: Pilotage chauffage
 description: ''
 trigger:
