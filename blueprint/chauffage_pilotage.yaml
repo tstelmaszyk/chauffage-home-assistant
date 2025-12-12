@@ -57,7 +57,7 @@ trigger:
 
 action:
   - alias: récupération des données
-     variables:
+    variables:
       entity_consigne: !input entity_consigne
       consigne: "{{state_attr (entity_consigne, 'temperature')}}"
   - choose:
