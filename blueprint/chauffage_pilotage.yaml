@@ -57,8 +57,9 @@ trigger:
 
 action:
   - alias: récupération des données
-    variables:
-          entity_consigne: !input entity_consigne
+     variables:
+      entity_consigne: !input entity_consigne
+      consigne: "{{state_attr (entity_consigne, 'temperature')}}"
   - choose:
       # ----- Mode Hors-gel
       - conditions:
@@ -92,7 +93,7 @@ action:
           - service: input_number.set_value
             data_template:
               entity_id: !input entity_sauvegarde
-              value: "{{state_attr (entity_consigne, 'temperature')}}"
+              value: "{{ consigne }}"
           - service: climate.turn_off
             target:
               entity_id: !input entity_consigne
