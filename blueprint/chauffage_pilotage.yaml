@@ -11,6 +11,12 @@ blueprint:
       selector:
         entity:
           domain: climate
+    entity_sauvegarde:
+      name: Sauvegarde
+      description: sauvegarde de la temperature
+      selector:
+        entity:
+          domain: input_number
     entity_activation:
       name: Activation ou non du chauffage
       description: Bouton switch à creer pour activer ou non le chauffage (été/hivers, arrêt long vacances ....)
@@ -81,8 +87,12 @@ action:
       - conditions:
           - condition: state
             entity_id: !input entity_fenetre
-            state: "on"
+            to: "on"
         sequence:
+          - service: input_number.set_value
+            data_template:
+              entity_id: !input entity_sauvegarde
+              value: '{{ '22' | float }}'
           - service: climate.turn_off
             target:
               entity_id: !input entity_consigne
