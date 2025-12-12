@@ -68,7 +68,7 @@ action:
         sequence:
           - service: climate.set_temperature
             data:
-              temperature: "{{state_attr (!input entity_consigne, 'away_temp')}}"
+              temperature: "{{state_attr ('!input entity_consigne', 'away_temp')}}"
             target:
               entity_id: !input entity_consigne
           - service: climate.turn_on
@@ -91,7 +91,7 @@ action:
         sequence:
           - service: climate.set_temperature
             data:
-              temperature: "{{state_attr (!input entity_consigne, 'eco_temp')}}"
+              temperature: "{{state_attr ('!input entity_consigne', 'eco_temp')}}"
             target:
               entity_id: !input entity_consigne
           - service: climate.turn_on
@@ -105,7 +105,7 @@ action:
         sequence:
           - service: climate.set_temperature
             data:
-              temperature: "{{state_attr (!input entity_consigne, 'comfort_temp')}}"
+              temperature: "{{state_attr ('!input entity_consigne', 'comfort_temp')}}"
             target:
               entity_id: !input entity_consigne
           - service: climate.turn_on
