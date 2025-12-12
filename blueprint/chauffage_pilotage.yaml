@@ -88,7 +88,7 @@ action:
       - conditions:
           - condition: state
             entity_id: !input entity_fenetre
-            to: "on"
+            state: "on"
         sequence:
           - service: input_number.set_value
             data_template:
