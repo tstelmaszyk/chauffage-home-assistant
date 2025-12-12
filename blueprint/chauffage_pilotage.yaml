@@ -69,14 +69,14 @@ action:
             entity_id: !input entity_precense
             state: "off"
         sequence:
-          - service: climate.set_temperature
-            data:
-              temperature: "{{state_attr ('entity_consigne', 'away_temp') | float}}"
-            target:
-              entity_id: !input entity_consigne
           - service: climate.turn_on
             target:
               entity_id: !input entity_consigne
+          - service: climate.set_preset_mode
+            target:
+              entity_id: !input entity_consigne
+            data:
+              preset_mode: "away"
       # ----- Fenetre to do turn Off
       - conditions:
           - condition: state
@@ -92,26 +92,26 @@ action:
             entity_id: !input entity_planning
             state: "off"
         sequence:
-          - service: climate.set_temperature
-            data:
-              temperature: "{{state_attr ('entity_consigne', 'eco_temp') | float}}"
-            target:
-              entity_id: !input entity_consigne
           - service: climate.turn_on
             target:
               entity_id: !input entity_consigne
+          - service: climate.set_preset_mode
+            target:
+              entity_id: !input entity_consigne
+            data:
+              preset_mode: "eco"
       # ----- Mode Auto - confort
       - conditions:
           - condition: state
             entity_id: !input entity_planning
             state: "on"
         sequence:
-          - service: climate.set_temperature
-            data:
-              temperature: "{{state_attr ('entity_consigne', 'comfort_temp') | float}}"
-            target:
-              entity_id: !input entity_consigne
           - service: climate.turn_on
             target:
               entity_id: !input entity_consigne
+          - service: climate.set_preset_mode
+            target:
+              entity_id: !input entity_consigne
+            data:
+              preset_mode: "comfort"
 mode: single
